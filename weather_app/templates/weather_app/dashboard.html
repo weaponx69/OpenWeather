@@ -1,0 +1,95 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AccuWeather Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        /* Internal CSS for quick setup; you can move this to style.css later */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #004e92, #000428);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            text-align: center;
+            width: 350px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        .weather-icon {
+            width: 100px;
+            height: 100px;
+            margin: 10px 0;
+        }
+        .temp {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin: 0;
+        }
+        .desc {
+            font-size: 1.2rem;
+            text-transform: capitalize;
+            opacity: 0.9;
+        }
+        .location {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .meta {
+            font-size: 0.8rem;
+            margin-top: 20px;
+            opacity: 0.6;
+        }
+        .error-msg {
+            color: #ff6b6b;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        {% if location %}
+            <div class="location">{{ location.EnglishName }}, {{ location.Country.ID }}</div>
+            
+            {% if weather %}
+                <img src="https://apidev.accuweather.com/developers/Media/Default/WeatherIcons/{{ weather.WeatherIcon|stringformat:'02d' }}-s.png" 
+                     alt="{{ weather.WeatherText }}" 
+                     class="weather-icon"
+                     onerror="this.src='https://www.accuweather.com/images/weathericons/{{ weather.WeatherIcon }}.svg';">
+
+                <p class="temp">{{ weather.Temperature.Metric.Value }}°C</p>
+                <p class="desc">{{ weather.WeatherText }}</p>
+            {% else %}
+                <p class="error-msg">Weather data currently unavailable.</p>
+            {% endif %}
+
+            <div class="meta">
+                IP Address: {{ ip }} <br>
+                Search logged to database.
+            </div>
+        {% else %}
+            <div class="error-msg">
+                <h2>Location Error</h2>
+                <p>Could not detect location for IP: {{ ip }}</p>
+            </div>
+        {% endif %}
+        
+        <br>
+        <a href="/admin/" style="color: #00d2ff; text-decoration: none; font-size: 0.9rem;">View Search History (Admin)</a>
+    </div>
+
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
