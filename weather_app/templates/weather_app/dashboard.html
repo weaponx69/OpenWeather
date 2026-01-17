@@ -69,7 +69,7 @@
                      class="weather-icon"
                      onerror="this.src='https://www.accuweather.com/images/weathericons/{{ weather.WeatherIcon }}.svg';">
 
-                <p class="temp">{{ weather.Temperature.Metric.Value }}°C</p>
+                <p class="temp">{{ weather.Temperature.Imperial.Value }}°F</p>
                 <p class="desc">{{ weather.WeatherText }}</p>
             {% else %}
                 <p class="error-msg">Weather data currently unavailable.</p>

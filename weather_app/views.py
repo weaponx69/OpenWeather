@@ -16,7 +16,7 @@ def get_client_ip(request):
     # Mock a public IP if testing on localhost (127.0.0.1)
     if ip == '127.0.0.1' or ip == '::1':
         #return '8.8.8.8'  # Example: Mountain View, CA
-        return '91.15.31.3'  # Example: Mountain View, CA
+        return '66.249.66.1'  # Example: 
     return ip
 
 def weather_dashboard(request):
