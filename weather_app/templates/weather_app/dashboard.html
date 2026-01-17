@@ -64,10 +64,9 @@
             <div class="location">{{ location.EnglishName }}, {{ location.Country.ID }}</div>
             
             {% if weather %}
-                <img src="https://apidev.accuweather.com/developers/Media/Default/WeatherIcons/{{ weather.WeatherIcon|stringformat:'02d' }}-s.png" 
+                <img src="https://openweathermap.org/img/wn/{{ weather.WeatherIcon }}@2x.png" 
                      alt="{{ weather.WeatherText }}" 
-                     class="weather-icon"
-                     onerror="this.src='https://www.accuweather.com/images/weathericons/{{ weather.WeatherIcon }}.svg';">
+                     class="weather-icon">
 
                 <p class="temp">{{ weather.Temperature.Imperial.Value }}°F</p>
                 <p class="desc">{{ weather.WeatherText }}</p>
@@ -87,7 +86,7 @@
         {% endif %}
         
         <br>
-        <a href="/admin/" style="color: #00d2ff; text-decoration: none; font-size: 0.9rem;">View Search History (Admin)</a>
+        <a href="{% url 'admin:index' %}" style="color: #00d2ff; text-decoration: none; font-size: 0.9rem;">View Search History (Admin)</a>
     </div>
 
     <script src="{% static 'js/script.js' %}"></script>

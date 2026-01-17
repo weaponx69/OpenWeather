@@ -17,7 +17,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # 3. SECURITY & KEYS (Pulled from .env)
 SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
-ACCUWEATHER_API_KEY = env('ACCUWEATHER_API_KEY')
+OPENWEATHER_API_KEY = env('OPENWEATHER_API_KEY')
 ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.1']
 CSRF_TRUSTED_ORIGINS = ['http://*.127.0.0.1', 'http://localhost']
 
@@ -68,12 +68,8 @@ WSGI_APPLICATION = 'accuweather_proj.wsgi.application'
 # Default to SQLite for development
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "weather_db",
-        "USER": "postgres",
-        "PASSWORD": "postgres",
-        "HOST": "localhost",  
-        "PORT": 5454, # This is the port on the host machine (which will be mapped to 5432 in the container)
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 

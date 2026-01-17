@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib import messages
-from .services import AccuWeatherService
+from .services import OpenWeatherService
 
 # REQUIREMENT: App 2 accessing App 1 models
 from location_app.models import SearchHistory
@@ -25,27 +25,29 @@ def weather_dashboard(request):
     """
     client_ip = get_client_ip(request)
     
-    # 1. Use the Service to talk to AccuWeather (Requirement: API Access)
-    location_data = AccuWeatherService.get_location_by_ip(client_ip)
-    weather_data = None
+    # 1. Use the Service to talk to OpenWeatherMap
+    result = OpenWeatherService.get_weather_by_ip(client_ip)
     
-    if location_data and 'Key' in location_data:
-        location_key = location_data['Key']
-        city_name = location_data.get('EnglishName', 'Unknown City')
+    location_data = None
+    weather_data = None
+    city_name = None
+    
+    if result:
+        location_data = result.get('location')
+        weather_data = result.get('weather')
+        city_name = location_data.get('EnglishName', 'Unknown City') if location_data else None
         
-        # 2. Fetch the actual current weather conditions
-        weather_data = AccuWeatherService.get_current_conditions(location_key)
-        
-        # 3. Persistence: Save to location_app (Requirement: Interaction between apps)
+        # 2. Persistence: Save to location_app (Requirement: Interaction between apps)
         # We wrap this in a try/except to ensure the page loads even if DB write fails
-        try:
-            SearchHistory.objects.create(
-                ip_address=client_ip,
-                city_name=city_name,
-                location_key=location_key
-            )
-        except Exception as e:
-            print(f"Database save failed: {e}")
+        if city_name:
+            try:
+                SearchHistory.objects.create(
+                    ip_address=client_ip,
+                    city_name=city_name,
+                    location_key=city_name  # Using city name as location key
+                )
+            except Exception as e:
+                print(f"Database save failed: {e}")
 
     context = {
         'ip': client_ip,
